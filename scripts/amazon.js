@@ -54,11 +54,35 @@ const products = [{
     count: 37,
   },
   priceINR:34.99
+},{
+  image:'images/products/plain-hooded-fleece-sweatshirt-yellow.jpg',
+  name:'Plain Hooded Fleece Sweatshirt',
+  ratings:{
+    stars:'images/ratings/rating-45.png',
+    count: 317
+  },
+  priceINR:24.00
+},{
+  image:'images/products/luxury-tower-set-6-piece.jpg',
+  name:'Luxury Towel Set - Graphite Gray',
+  ratings:{
+    stars:'images/ratings/rating-45.png',
+    count: 144
+  },
+  priceINR:35.99
+},{
+  image:'images/products/liquid-laundry-detergent-plain.jpg',
+  name:'Liquid Laundry Detergent, 110 Loads, 82.5 Fl Oz',
+  ratings:{
+    stars:'images/ratings/rating-45.png',
+    count:305
+  },
+  priceINR:28.99
 }];
 
 
 /*2)Generate the HTML*/
-let result = '';   /// Accumulator Variable
+let productsHTML = '';   /// Accumulator Variable
 
 products.forEach((product)=>{
  const html = `
@@ -81,7 +105,7 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-price">
-            ${product.priceINR} INR
+            ${product.priceINR.toFixed(2)} INR
           </div>
 
           <div class="product-quantity-container">
@@ -106,16 +130,45 @@ products.forEach((product)=>{
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">
+          <button class="add-to-cart-button button-primary js-add-to-cart-btn">
             Add to Cart
           </button>
         </div>
  
  `;
- result = result + html;
+ productsHTML = productsHTML + html;
 //  console.log(result);
-document.querySelector('.js-product-cont-grid').innerHTML = result;
+document.querySelector('.js-product-cont-grid').innerHTML = productsHTML;
 });
+
+/*3)Make it Interactive*/
+/*
+for cart we need 2 things product and quantity so 
+we use array of objects like 
+const cart = [{
+  product: 'produt1',
+  quantuty: 1 ,
+},{
+  product: 'product2',
+  quantity: 3,
+}] 
+
+Let's create a seperate file for cart to make our code cleaner data/cart.js file, so that each file focus on one particular thing.
+*/
+document.querySelectorAll('.js-add-to-cart-btn')
+.forEach((button)=>{
+button.addEventListener('click', ()=>{
+  //Best way written below
+  /*
+  How do we know which product to add?
+  Data Attribute :-
+  *It's just another HTML attribute
+  *allows us to attach any information o an element
+  */
+ 
+});
+
+})
 
 
 
