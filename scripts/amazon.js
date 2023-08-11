@@ -190,11 +190,21 @@ let matchingItem;
        quantity: 1,
       })
     }
- console.log(cart);
+//  console.log(cart);
+
+ let cartQuantity = 0;
+  cart.forEach((cartItem)=>{
+   cartQuantity = cartQuantity + cartItem.quantity;
+})
+
+ document.querySelector('.js-cart-quantity').textContent = cartQuantity;
+
+
+
+
 
 
 });
-
 });
 
 
