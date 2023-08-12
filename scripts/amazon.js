@@ -85,6 +85,7 @@ Main idea of Javascript
 
 /*2)Generate the HTML*/
 let productsHTML = '';   /// Accumulator Variable
+let selectorCartValNumber ;
 
 products.forEach((product)=>{
  const html = `
@@ -111,7 +112,7 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -142,7 +143,10 @@ products.forEach((product)=>{
  productsHTML = productsHTML + html;
 //  console.log(result);
 document.querySelector('.js-product-cont-grid').innerHTML = productsHTML;
+
+
 });
+
 
 /*3)Make it Interactive*/
 /*
@@ -175,6 +179,12 @@ button.addEventListener('click', ()=>{
 //  console.log(button.dataset.productName);
  const productId = button.dataset.productId;
 
+ const selectorCartValue = document.querySelector(`.js-quantity-selector-${productId}`).value;
+
+selectorCartValNumber = Number(selectorCartValue);
+
+console.log(selectorCartValNumber);
+
 let matchingItem;
 
  cart.forEach((cartItem)=>{
@@ -183,17 +193,20 @@ let matchingItem;
    }});
 
    if(matchingItem){
-    matchingItem.quantity +=1;
+    // matchingItem.quantity +=1;
+
+    matchingItem.quantity +=selectorCartValNumber;
     }else{
       cart.push({
        productId: productId,
-       quantity: 1,
+      //  quantity: 1,
+       quantity: selectorCartValNumber,
       })
     }
 //  console.log(cart);
 
- let cartQuantity = 0;
-  cart.forEach((cartItem)=>{
+ let cartQuantity = 0 ;
+   cart.forEach((cartItem)=>{
    cartQuantity = cartQuantity + cartItem.quantity;
 })
 
