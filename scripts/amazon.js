@@ -128,7 +128,7 @@ products.forEach((product)=>{
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-added-to-cart-inc-opacty-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -164,9 +164,25 @@ Let's create a seperate file for cart to make our code cleaner data/cart.js file
 */
 
 
+
+
+// We're going to use an object to save the timeout ids.
+// The reason we use an object is because each product
+// will have its own timeoutId. So an object lets us
+// save multiple timeout ids for different products.
+// For example:
+// {
+//   'product-id1': 2,
+//   'product-id2': 5,
+//   ...
+// }
+// (2 and 5 are ids that are returned when we call setTimeout).
+const addedMessageTimeouts = {};
+
 document.querySelectorAll('.js-add-to-cart-btn')
 .forEach((button)=>{
 button.addEventListener('click', ()=>{
+  
   //Best way written below
   /*
   How do we know which product to add?
@@ -177,13 +193,33 @@ button.addEventListener('click', ()=>{
 
   /*It is not good to use productName, rather use productId*/
 //  console.log(button.dataset.productName);
- const productId = button.dataset.productId;
+//  const productId = button.dataset.productId;
+const {productId} = button.dataset; // object destructuring 
+// console.log(button.dataset)
 
- const selectorCartValue = document.querySelector(`.js-quantity-selector-${productId}`).value;
+const selectorCartValue = document.querySelector(`.js-quantity-selector-${productId}`).value;
 
 selectorCartValNumber = Number(selectorCartValue);
 
 console.log(selectorCartValNumber);
+
+/* Added message when click Add to cart button*/
+document.querySelector(`.js-added-to-cart-inc-opacty-${productId}`).classList.add('added-to-cart-opacty');
+setTimeout(()=>{
+  // Check if there's a previous timeout for this
+  // product. If there is, we should stop it.
+  const previousTimeoutId = addedMessageTimeouts[productId];
+      if (previousTimeoutId) {
+        clearTimeout(previousTimeoutId);
+      }
+  const timeoutId = setTimeout(()=>{
+  document.querySelector(`.js-added-to-cart-inc-opacty-${productId}`).classList.remove('added-to-cart-opacty');
+},2000);
+  // Save the timeoutId for this product
+  // so we can stop it later if we need to.
+      addedMessageTimeouts[productId] = timeoutId;
+});
+
 
 let matchingItem;
 
@@ -198,7 +234,8 @@ let matchingItem;
     matchingItem.quantity +=selectorCartValNumber;
     }else{
       cart.push({
-       productId: productId,
+      //  productId: productId,
+       productId,  // shorthand property
       //  quantity: 1,
        quantity: selectorCartValNumber,
       })
