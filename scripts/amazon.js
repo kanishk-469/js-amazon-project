@@ -1,4 +1,4 @@
-import {cart, addToCart,selectorCartValNumber} from "../data/cart.js";
+import {updateCartQuantity, addToCart} from "../data/cart.js";
 import {products} from "../data/products.js";
 
 /* 
@@ -106,39 +106,6 @@ const cart = [{
 Let's create a seperate file for cart to make our code cleaner data/cart.js file, so that each file focus on one particular thing.
 */
 
-
-
-
-
-
-function updateCartQuantity(productId){
-let matchingItem;
-
-cart.forEach((cartItem)=>{
-  if(productId === cartItem.productId){
-   matchingItem = cartItem;
-  }});
-
-  if(matchingItem){
-   // matchingItem.quantity +=1;
-
-   matchingItem.quantity +=selectorCartValNumber;
-   }else{
-     cart.push({
-     //  productId: productId,
-      productId,  // shorthand property
-     //  quantity: 1,
-      quantity: selectorCartValNumber,
-     })
-   }
-//  console.log(cart);
-
-let cartQuantity = 0 ;
-  cart.forEach((cartItem)=>{
-  cartQuantity = cartQuantity + cartItem.quantity;
-})
-document.querySelector('.js-cart-quantity').textContent = cartQuantity;
-}
 
 
 document.querySelectorAll('.js-add-to-cart-btn')
