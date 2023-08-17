@@ -1,5 +1,6 @@
 import {updateCartQuantity, addToCart} from "../data/cart.js";
 import {products} from "../data/products.js";
+import {formatCurrency} from "./utils/money.js";
 
 /* 
 Main idea of Javascript
@@ -54,7 +55,7 @@ products.forEach((product)=>{
           </div>
 
           <div class="product-price">
-            ${product.priceCents.toFixed(2)} INR
+          ₹ ${formatCurrency(product.priceCents)}
           </div>
 
           <div class="product-quantity-container">
