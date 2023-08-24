@@ -1,4 +1,7 @@
-export let cart = [
+export let cart = JSON.parse(localStorage.getItem('cart'));
+
+if(!cart){            // default value set 
+cart = [
   {
     productId:"e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
     quantity: 2,
@@ -7,6 +10,12 @@ export let cart = [
     quantity: 1,
   }
 ];
+}
+
+function saveToStorage(){     // storing cart value to Browser's Local storage system
+  localStorage.setItem('cart', JSON.stringify(cart));
+
+}
 
 export let selectorCartValNumber ;
 // We're going to use an object to save the timeout ids.
@@ -80,6 +89,7 @@ export function updateCartQuantity(productId){
     cartQuantity = cartQuantity + cartItem.quantity;
   })
   document.querySelector('.js-cart-quantity').textContent = cartQuantity;
+  saveToStorage();
   }
 
   export function removeFromCart(productId){
@@ -91,5 +101,5 @@ export function updateCartQuantity(productId){
   });
   cart = newCart;
   // console.log(cart);
-
+  saveToStorage();
   }

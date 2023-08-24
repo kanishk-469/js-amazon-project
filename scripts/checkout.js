@@ -111,7 +111,7 @@ deleteLink.addEventListener('click' , ()=>{
   const container = document.querySelector(`
   .js-cart-item-container-${productId}`);
   // console.log(container);
-  container.remove();
+  container.remove(); // we can remove any element from DOM using .remove() method.
 
   }); 
 });
