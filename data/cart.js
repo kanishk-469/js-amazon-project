@@ -103,3 +103,33 @@ export function updateCartQuantity(productId){
   // console.log(cart);
   saveToStorage();
   }
+
+
+  export function calculateCartQuantity(strigClss = '', rightSide = ''){
+ let cartQuantity = 0;
+
+cart.forEach((cartItem) => {
+  cartQuantity += cartItem.quantity;
+});
+
+if(strigClss === '' && rightSide === ''){
+return;
+}else{
+document.querySelector(strigClss)
+.innerHTML = `${cartQuantity} ` + rightSide;
+}
+  }
+
+
+  export function updateQuantity(productId,newQuantity){
+    let matchingItem;
+  
+    cart.forEach((cartItem)=>{
+    if(productId === cartItem.productId){
+     matchingItem = cartItem;
+    }
+  });
+   matchingItem.quantity = newQuantity;
+
+  saveToStorage();
+  }

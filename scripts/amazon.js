@@ -1,4 +1,4 @@
-import {updateCartQuantity, addToCart} from "../data/cart.js";
+import {updateCartQuantity,calculateCartQuantity, addToCart, cart} from "../data/cart.js";
 import {products} from "../data/products.js";
 import {formatCurrency} from "./utils/money.js";
 
@@ -107,6 +107,17 @@ const cart = [{
 Let's create a seperate file for cart to make our code cleaner data/cart.js file, so that each file focus on one particular thing.
 */
 
+// function updateHeaderCartQuantity(){
+//   let cartQuantity = 0;
+//   cart.forEach(( cartItem)=>{
+//     cartQuantity +=cartItem.quantity;
+//   });
+//   document.querySelector('.js-cart-quantity')
+//   .innerHTML = cartQuantity;
+
+// }
+
+calculateCartQuantity('.js-cart-quantity');
 
 
 document.querySelectorAll('.js-add-to-cart-btn')
@@ -121,6 +132,3 @@ const {productId} = button.dataset; // object destructuring
   updateCartQuantity(productId);
 });
 });
-
-
-
