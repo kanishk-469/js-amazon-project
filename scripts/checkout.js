@@ -10,6 +10,7 @@ import {
   removeFromCart,
   calculateCartQuantity,
   updateQuantity,
+  updateDeliveryOption
 } from "../data/cart.js"; // normal export
 import { products } from "../data/products.js"; //normal export
 import { formatCurrency } from "./utils/money.js"; // normal export
@@ -24,11 +25,13 @@ import { deliveryOptions } from "../data/deliveryOptions.js";
 // console.log(deliveryDate);
 
 /*Runs external library function + module*/
-  // hello();
+  hello();
   // const today = dayjs();
   // const deliveryDate = today.add(7, "days");
   // console.log(deliveryDate.format('dddd, MMMM D'));
 
+
+  function renderOrderSummary(){
 let cartSummaryHTML = "";
 
 cart.forEach((cartItem) => {
@@ -127,8 +130,11 @@ const priceString = deliveryOption.priceCents === 0
 const isChecked = deliveryOption.id === cartItem.deliveryOptionId ? "checked" : '';
 
 
- html += `<div class="delivery-option">
-  <input type="radio"  
+ html += `<div class="delivery-option js-delivery-option"
+    data-product-id= "${matchingProduct.id}"
+    data-delivery-option-id= "${deliveryOption.id}"
+    >
+  <input type="radio" 
   ${isChecked}
   class="delivery-option-input" name="delivery-option-${
     matchingProduct.id
@@ -238,3 +244,18 @@ document.querySelectorAll(".js-save-link").forEach((link) => {
 // .innerHTML = `${cartQuantity} items`;
 // }
 calculateCartQuantity(".js-cart-quantity-header", "items");
+
+const deliveryOption = document.querySelectorAll(".js-delivery-option");
+    // console.log(deliveryOption);
+    deliveryOption.forEach((element)=>{ 
+     element.addEventListener('click', ()=>{
+      // const productId = element.dataset.productId;
+      // const deliveryOptionId = element.dataset.deliveryOptionId;
+      const {productId ,deliveryOptionId } = element.dataset;
+      updateDeliveryOption(productId,deliveryOptionId);
+        renderOrderSummary(); // A function can call/ re-run itself called recursion
+     })
+ });
+
+}
+renderOrderSummary();
