@@ -13,7 +13,7 @@ import {
   updateDeliveryOption
 } from "../../data/cart.js"; // normal export
 import { products } from "../../data/products.js"; //normal export
-import { formatCurrency } from "../utils/money.js"; // normal export
+import formatCurrency from "../utils/money.js"; // normal export
 import {hello} from "https://unpkg.com/supersimpledev@1.0.1/hello.esm.js"; // Normal export
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js"; // default export
 import { deliveryOptions } from "../../data/deliveryOptions.js";
