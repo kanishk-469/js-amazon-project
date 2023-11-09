@@ -17,6 +17,8 @@ import formatCurrency from "../utils/money.js"; // normal export
 import {hello} from "https://unpkg.com/supersimpledev@1.0.1/hello.esm.js"; // Normal export
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js"; // default export
 import { deliveryOptions } from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
+// renderPaymentSummary
 
 /*Runs external library function without module*/
 // hello();
@@ -165,13 +167,18 @@ cartDeleteBtn.forEach((deleteLink) => {
     const productId = deleteLink.dataset.productId;
     removeFromCart(productId);
     //  console.log(cart);
+    
+
 
     const container = document.querySelector(`
   .js-cart-item-container-${productId}`);
     // console.log(container);
     container.remove(); // we can remove any element from DOM using .remove() method.
     // updateCartQuantity();
+    renderPaymentSummary(); // regenerate html (View) after updating data(Model)
+    
     calculateCartQuantity(".js-cart-quantity-header", "items");
+    
   });
 });
 
@@ -254,10 +261,14 @@ const deliveryOption = document.querySelectorAll(".js-delivery-option");
       const {productId ,deliveryOptionId } = element.dataset;
       updateDeliveryOption(productId,deliveryOptionId); // update the data
         renderOrderSummary(); // A function can call/ re-run itself called recursion, regenerate HTML when updating delivery option
+        renderPaymentSummary(); // regenerate html (View) after updating data(Model)
      })
  });
 
+ 
 }
+
+
 // renderOrderSummary();
 // Technique i used here is MVC 
 /*
