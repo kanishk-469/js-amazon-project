@@ -5,19 +5,14 @@ Main idea of Javascript
 3)Make it Interactive
 */
 
-import {
-  cart,
-  removeFromCart,
-  calculateCartQuantity,
-  updateQuantity,
-  updateDeliveryOption
-} from "../../data/cart.js"; // normal export
+import {cart,removeFromCart,calculateCartQuantity,updateQuantity,updateDeliveryOption} from "../../data/cart.js"; // normal export
 import { products } from "../../data/products.js"; //normal export
 import formatCurrency from "../utils/money.js"; // normal export
 import {hello} from "https://unpkg.com/supersimpledev@1.0.1/hello.esm.js"; // Normal export
-import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js"; // default export
-import { deliveryOptions } from "../../data/deliveryOptions.js";
+// import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js"; // default export
+import { deliveryOptions, getDeliveryOption, calculateDeliveryDate } from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
+import { renderCheckoutHeader } from "./checkoutHeader.js";
 // renderPaymentSummary
 
 /*Runs external library function without module*/
@@ -49,16 +44,17 @@ cart.forEach((cartItem) => {
    
   const deliveryOptionId = cartItem.deliveryOptionId;
 
-  let deliveryOption;
-  deliveryOptions.forEach((option)=>{
-    if(option.id === deliveryOptionId){
-      deliveryOption = option;
-    }
-  });
+  let deliveryOption = getDeliveryOption(deliveryOptionId);
+  // deliveryOptions.forEach((option)=>{
+  //   if(option.id === deliveryOptionId){
+  //     deliveryOption = option;
+  //   }
+  // });
 
-  const today = dayjs();
-  const deliveryDate = today.add( deliveryOption.deliveryDays , 'days');
-  const dateString = deliveryDate.format('dddd, MMMM D');
+  // const today = dayjs();
+  // const deliveryDate = today.add( deliveryOption.deliveryDays , 'days');
+  // const dateString = deliveryDate.format('dddd, MMMM D');
+  const dateString = calculateDeliveryDate(deliveryOption);
 
   cartSummaryHTML += `
   <div class="cart-item-container 
@@ -121,10 +117,11 @@ function deliveryOptionHtml(matchingProduct,cartItem){
 let html = '';
 
 deliveryOptions.forEach((deliveryOption) => {
-const today = dayjs();
-const deliveryDate = today.add( deliveryOption.deliveryDays , 'days');
+// const today = dayjs();
+// const deliveryDate = today.add( deliveryOption.deliveryDays , 'days');
 
-const dateString = deliveryDate.format('dddd, MMMM D');
+// const dateString = deliveryDate.format('dddd, MMMM D');
+const dateString = calculateDeliveryDate(deliveryOption);
 const priceString = deliveryOption.priceCents === 0 
 ? 'FREE' 
 : `$${formatCurrency(deliveryOption.priceCents)} - `;
@@ -169,13 +166,14 @@ cartDeleteBtn.forEach((deleteLink) => {
     //  console.log(cart);
     
 
-
-    const container = document.querySelector(`
-  .js-cart-item-container-${productId}`);
-    // console.log(container);
-    container.remove(); // we can remove any element from DOM using .remove() method.
-    // updateCartQuantity();
+  
+  //   const container = document.querySelector(`
+  // .js-cart-item-container-${productId}`);
+  //   // console.log(container); debugging or tracking data flow using console
+  //   container.remove(); // we can remove any element from DOM using .remove() method.
+  //   // updateCartQuantity();
     renderPaymentSummary(); // regenerate html (View) after updating data(Model)
+    renderOrderSummary();  // regenerate the HTML for orderSummary without DOM Manipulation
     
     calculateCartQuantity(".js-cart-quantity-header", "items");
     
@@ -229,13 +227,30 @@ document.querySelectorAll(".js-save-link").forEach((link) => {
     );
     container.classList.remove("is-editing-quantity");
 
-    const quantityLabel = document.querySelector(
-      `.js-quantity-label-${productId}`
-    );
-    quantityLabel.innerHTML = newQuantity;
+    // const quantityLabel = document.querySelector(
+    //   `.js-quantity-label-${productId}`
+    // );
+    // quantityLabel.innerHTML = newQuantity;
 
     // calculateCartQuantity();
+    renderCheckoutHeader();
+    renderOrderSummary();
+    renderPaymentSummary(); // MVC concept used here, not DOM
     calculateCartQuantity(".js-cart-quantity-header", "items");
+    
+
+        // We can delete the code below (from the original solution)
+        // because instead of using the DOM to update the page directly
+        // we can use MVC and re-render everything. This will make sure
+        // the page always matches the data.
+
+        // const quantityLabel = document.querySelector(
+        //   `.js-quantity-label-${productId}`
+        // );
+        // quantityLabel.innerHTML = newQuantity;
+
+        // updateCartQuantity();
+
   });
 });
 
@@ -250,7 +265,7 @@ document.querySelectorAll(".js-save-link").forEach((link) => {
 // document.querySelector('.js-cart-quantity-header')
 // .innerHTML = `${cartQuantity} items`;
 // }
-calculateCartQuantity(".js-cart-quantity-header", "items");
+calculateCartQuantity(".js-cart-quantity-header ", "items");
 
 const deliveryOption = document.querySelectorAll(".js-delivery-option");
     // console.log(deliveryOption);
@@ -259,16 +274,16 @@ const deliveryOption = document.querySelectorAll(".js-delivery-option");
       // const productId = element.dataset.productId;
       // const deliveryOptionId = element.dataset.deliveryOptionId;
       const {productId ,deliveryOptionId } = element.dataset;
-      updateDeliveryOption(productId,deliveryOptionId); // update the data
+        renderCheckoutHeader();  // updating cart items using MVC not DOM Maniplution
+        updateDeliveryOption(productId,deliveryOptionId); // update the data
         renderOrderSummary(); // A function can call/ re-run itself called recursion, regenerate HTML when updating delivery option
         renderPaymentSummary(); // regenerate html (View) after updating data(Model)
+       
      })
  });
 
  
 }
-
-
 // renderOrderSummary();
 // Technique i used here is MVC 
 /*

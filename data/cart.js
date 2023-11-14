@@ -108,17 +108,17 @@ export function updateCartQuantity(productId){
   }
 
 
-  export function calculateCartQuantity(strigClss = '', rightSide = ''){
+  export function calculateCartQuantity(strigClass = '', rightSide = ''){
  let cartQuantity = 0;
 
 cart.forEach((cartItem) => {
   cartQuantity += cartItem.quantity;
 });
 
-if(strigClss === '' && rightSide === ''){
+if(strigClass === '' && rightSide === ''){
 return;
 }else{
-document.querySelector(strigClss)
+document.querySelector(strigClass)
 .innerHTML = `${cartQuantity} ` + rightSide;
 }
   }
